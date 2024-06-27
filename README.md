@@ -16,7 +16,7 @@ git clone git@github.com:lucasboina/eventex.git wttd
 cd wttd 
 python -m venv .venv
 source .wttd/bin/activate
-pip install -r requirements.txt
+pip install -r requirements_dev.txt
 cp contrib/env-sample .env
 python3 manage.py test
 ```
