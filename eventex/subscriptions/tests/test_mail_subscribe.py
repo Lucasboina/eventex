@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.core import mail
 
-
 class SubscribePostValid(TestCase):
     
     def setUp(self):

@@ -6,6 +6,8 @@ from django.core import mail
 from django.template.loader import render_to_string
 from django.contrib import messages
 
+from eventex.subscriptions.models import Subscription
+
 
 def subscribe(request):
 
@@ -28,7 +30,7 @@ def create(request):
                 form.cleaned_data,
                'subscriptions/subscription_email.txt')
 
-   
+    Subscription.objects.create(**form.cleaned_data)
         
     messages.success(request,"Inscrição Realizada com sucesso!")
     return HttpResponseRedirect('/inscricao/')
