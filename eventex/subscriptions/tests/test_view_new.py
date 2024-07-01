@@ -42,7 +42,7 @@ class SubscriptionNewGet(TestCase):
 class SubscriptionNewPostValid(TestCase):
 
     def setUp(self):
-        data = dict(name = "Lucas",cpf = '1234567890', 
+        data = dict(name = "Lucas",cpf = '12345678901', 
                     phone = '111',email='lucasmmantelli@gmail.com')
         self.response = self.client.post(r('subscriptions:new'),data)
     
