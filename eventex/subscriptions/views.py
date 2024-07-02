@@ -24,12 +24,14 @@ def create(request):
     if not form.is_valid():
         return render(request,'subscriptions/subscription_form.html',{'form':form})
     
-    subscription = Subscription.objects.create(**form.cleaned_data)
+    subscription = form.save()
+    
     _send_mail('Confirmação de inscrição',
-                settings.DEFAULT_FROM_EMAIL,
-                subscription.email,
-                {"subscription":subscription},
+               settings.DEFAULT_FROM_EMAIL,
+               subscription.email,
+               {"subscription":subscription},
                'subscriptions/subscription_email.txt')
+    
     return HttpResponseRedirect(r("subscriptions:detail",subscription.pk))
    
         
