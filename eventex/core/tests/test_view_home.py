@@ -36,16 +36,16 @@ class HomeTest(TestCase):
             with self.subTest():
                 self.assertContains(self.response,content)
     
-    def test_speakers_link(self):
+    def test_links(self):
         contents = [
-            'overview',
-            'speakers',
-            'sponsors',
-            'register',
-            'venue',
+            ('home','#overview'),
+            ('home','#speakers'),
+            ('home','#sponsors'),
+            ('home','#register'),
+            ('home','#venue'),
+            ('talk_list','')      
         ]
-        for content in contents:
+        for redirect, area in contents:
             with self.subTest():
-                expected = 'href="{}#{}"'.format(r('home'),content)
+                expected = 'href="{}{}"'.format(r(redirect),area)
                 self.assertContains(self.response, expected)
-
