@@ -1,13 +1,15 @@
 from django.test import TestCase
 from django.shortcuts import resolve_url as r
 
-from eventex.core.models import Speaker, Talk
+from eventex.core.models import Course, Speaker, Talk
 
 
 class TalkListGet(TestCase):
     def setUp(self):
         t1 = Talk.objects.create(title = 'Título da Palestra', start = '10:00', description = 'Descrição da palestra')
         t2 = Talk.objects.create(title = 'Título da Palestra', start = '13:00', description = 'Descrição da palestra')
+        c1 = Course.objects.create(title = 'Título do curso', start = '09:00', description = 'Descrição do curso',slots=20)
+        
         
         speaker = Speaker.objects.create(
             name = "Lucas Mantelli",
@@ -17,6 +19,7 @@ class TalkListGet(TestCase):
         
         t1.speakers.add(speaker)
         t2.speakers.add(speaker)
+        c1.speakers.add(speaker)
         
         self.response = self.client.get(r('talk_list'))
         
@@ -29,11 +32,15 @@ class TalkListGet(TestCase):
     def test_html(self):
         contents =[
             (2,'Título da Palestra'),
-            (2,'Lucas Mantelli'),
+            (3,'Lucas Mantelli'),
             (2,'Descrição da palestra'),
-            (2,'/palestrantes/lucas-mantelli/'),
+            (3,'/palestrantes/lucas-mantelli/'),
             (1,'10:00'),
-            (1,'13:00')           
+            (1,'13:00'),
+            (1,'Título do curso'),
+            (1,'09:00'),
+            (1,'Descrição do curso'),
+                                 
         ]
         
         for count, expected in contents:    
@@ -41,7 +48,7 @@ class TalkListGet(TestCase):
                 self.assertContains(self.response,expected,count)
     
     def test_context(self):
-        variables = ['morning_talks','afternoon_talks']
+        variables = ['morning_talks','afternoon_talks','courses']
         for key in variables:
             with self.subTest():
                 self.assertIn(key, self.response.context)
@@ -51,4 +58,4 @@ class TalkListGetEmpty(TestCase):
         response = self.client.get(r('talk_list'))
         self.assertContains(response,'Ainda não existem palestras de manhã')
         self.assertContains(response,'Ainda não existem palestras de tarde')
-        
+         
