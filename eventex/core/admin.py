@@ -1,4 +1,7 @@
+from typing import Any
 from django.contrib import admin
+from django.db.models.query import QuerySet
+from django.http import HttpRequest
 from django.utils.html import format_html
 from eventex.core.models import Contact, Course, Speaker, Talk
 
@@ -31,8 +34,12 @@ class SpeakerModelAdmin(admin.ModelAdmin):
         return obj.contact_set.phones().first()
     
     phone.short_description = 'telefone'
-    
+
+class TalkModelAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(course=None)
     
 admin.site.register(Speaker, SpeakerModelAdmin)
-admin.site.register(Talk)
+admin.site.register(Talk,TalkModelAdmin)
 admin.site.register(Course)
